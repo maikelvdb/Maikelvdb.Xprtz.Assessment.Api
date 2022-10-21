@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maikelvdb.Xprtz.Assessment.Api", "Maikelvdb.Xprtz.Assessment.Api\Maikelvdb.Xprtz.Assessment.Api.csproj", "{0FF3358F-0367-4F0B-95B5-9168CF887DDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maikelvdb.Xprtz.Assessment.Database", "Maikelvdb.Xprtz.Assessment.Database\Maikelvdb.Xprtz.Assessment.Database.csproj", "{6CE3B0E6-FA77-47DF-91AE-2E9AE27721C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maikelvdb.Xprtz.Assessment.Dto", "Maikelvdb.Xprtz.Assessment.Dto\Maikelvdb.Xprtz.Assessment.Dto.csproj", "{3E816F67-C327-403F-8393-DAB7565B6E51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FF3358F-0367-4F0B-95B5-9168CF887DDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FF3358F-0367-4F0B-95B5-9168CF887DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FF3358F-0367-4F0B-95B5-9168CF887DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FF3358F-0367-4F0B-95B5-9168CF887DDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CE3B0E6-FA77-47DF-91AE-2E9AE27721C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE3B0E6-FA77-47DF-91AE-2E9AE27721C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE3B0E6-FA77-47DF-91AE-2E9AE27721C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE3B0E6-FA77-47DF-91AE-2E9AE27721C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E816F67-C327-403F-8393-DAB7565B6E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E816F67-C327-403F-8393-DAB7565B6E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E816F67-C327-403F-8393-DAB7565B6E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E816F67-C327-403F-8393-DAB7565B6E51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5CB2392A-2F15-4EED-9F3A-422759CDCC09}
+	EndGlobalSection
+EndGlobal
