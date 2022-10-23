@@ -1,10 +1,12 @@
-﻿using Maikelvdb.Xprtz.Assessment.Database;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using System.Text.Json;
 using Microsoft.AspNetCore.Http.Json;
+using Maikelvdb.Xprtz.Assessment.Api.Framework.Filters;
+using Microsoft.AspNetCore.Identity;
+using Maikelvdb.Xprtz.Assessment.Api.Features.Shows.Commands;
+using Maikelvdb.Xprtz.Assessment.Api.Services.TvMazeApi;
+using Maikelvdb.Xprtz.Assessment.Api.Framework.HostedService;
 
 namespace Maikelvdb.Xprtz.Assessment.Api
 {
@@ -14,12 +16,18 @@ namespace Maikelvdb.Xprtz.Assessment.Api
         {
             var services = builder.Services;
 
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssemblyContaining<CreateShowCommand>();
 
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+            services.AddHostedService<DailyDataRetrieverHostedService>();
+            services.AddScoped<ITvMazeApiService, TvMazeApiService>();
 
-            builder.Services.AddControllers()
+            services.AddMemoryCache();
+            builder.Services.AddControllers(options => {
+                options.Filters.Add<FluentValidationActionFilter>();
+            })
                 .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -55,6 +63,29 @@ namespace Maikelvdb.Xprtz.Assessment.Api
             app.UseAuthorization();
 
             app.MapControllers();
+        }
+
+        public static async Task EnsureDatabaseAsync(this WebApplicationBuilder builder)
+        {
+            using var provider = builder.Services.BuildServiceProvider();
+            using var context = provider.GetRequiredService<DataContext>();
+
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+            if (pendingMigrations.Any())
+            {
+                await context.Database.MigrateAsync();
+            }
+        }
+
+        private static bool IsMigrationOperationExecuting()
+        {
+            var commandLineArguments = Environment.GetCommandLineArgs();
+            if (commandLineArguments.Any(x => x.ToLower() == "migrations"))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

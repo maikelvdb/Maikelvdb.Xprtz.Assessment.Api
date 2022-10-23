@@ -1,1 +1,3 @@
-# Maikelvdb.Xprtz.Assessment.Api
+- DTO project
+- Database project
+- 

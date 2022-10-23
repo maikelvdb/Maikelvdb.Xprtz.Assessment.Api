@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Maikelvdb.Xprtz.Assessment.Database.Framework
+namespace Maikelvdb.Xprtz.Assessment.Database
 {
-    public interface IEntity
+    public interface IDbEntity
     {
         [Key,
             DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -12,8 +12,8 @@ namespace Maikelvdb.Xprtz.Assessment.Database.Framework
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
     }
-    
-    public abstract class Entity
+
+    public abstract class DbEntity
     {
         [Key,
             DatabaseGenerated(DatabaseGeneratedOption.Identity)]
