@@ -1,8 +1,4 @@
-﻿using Maikelvdb.Xprtz.Assessment.Api.Services.TvMazeApi;
-using Timer = System.Threading.Timer;
-using Microsoft.Data.SqlClient;
-using Dapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Timer = System.Threading.Timer;
 
 namespace Maikelvdb.Xprtz.Assessment.Api.Framework.HostedService
 {

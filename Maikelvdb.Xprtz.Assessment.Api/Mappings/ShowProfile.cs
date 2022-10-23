@@ -1,5 +1,4 @@
 ﻿using Maikelvdb.Xprtz.Assessment.Api.Features.Shows.Commands;
-using Maikelvdb.Xprtz.Assessment.Api.Services.TvMazeApi.Models;
 
 namespace Maikelvdb.Xprtz.Assessment.Api.Mappings
 {

@@ -9,5 +9,4 @@ global using Microsoft.EntityFrameworkCore;
 
 global using Maikelvdb.Xprtz.Assessment.Database;
 global using Maikelvdb.Xprtz.Assessment.Dto.Shows;
-global using Maikelvdb.Xprtz.Assessment.Api.Services;
 global using Maikelvdb.Xprtz.Assessment.Database.Entities;

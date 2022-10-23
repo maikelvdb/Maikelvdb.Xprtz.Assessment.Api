@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http.Json;
 using Maikelvdb.Xprtz.Assessment.Api.Framework.Filters;
 using Microsoft.AspNetCore.Identity;
 using Maikelvdb.Xprtz.Assessment.Api.Features.Shows.Commands;
-using Maikelvdb.Xprtz.Assessment.Api.Services.TvMazeApi;
 using Maikelvdb.Xprtz.Assessment.Api.Framework.HostedService;
 
 namespace Maikelvdb.Xprtz.Assessment.Api
@@ -22,7 +21,6 @@ namespace Maikelvdb.Xprtz.Assessment.Api
             services.AddValidatorsFromAssemblyContaining<CreateShowCommand>();
 
             services.AddHostedService<DailyDataRetrieverHostedService>();
-            services.AddScoped<ITvMazeApiService, TvMazeApiService>();
 
             services.AddMemoryCache();
             builder.Services.AddControllers(options => {
