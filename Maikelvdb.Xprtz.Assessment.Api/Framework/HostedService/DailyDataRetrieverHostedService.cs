@@ -2,7 +2,7 @@
 using Timer = System.Threading.Timer;
 using Microsoft.Data.SqlClient;
 using Dapper;
-using Maikelvdb.Xprtz.Assessment.Api.Services.TvMazeApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Maikelvdb.Xprtz.Assessment.Api.Framework.HostedService
 {
@@ -41,12 +41,55 @@ namespace Maikelvdb.Xprtz.Assessment.Api.Framework.HostedService
         {
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetService<DataContext>();
-            var tvMazeApiService = scope.ServiceProvider.GetService<ITvMazeApiService>();
 
-            using var connection = new SqlConnection(_configuration.GetConnectionString("Default"));
-            var existingShows = await connection.QueryAsync<Show>("SELECT ExternalId FROM dbo.Shows WHERE ExternalId IS NOT NULL");
-            var mazeShows = await tvMazeApiService.CollectShowsAsync(new DateTime(2014, 1, 1));
+            var maxShowId = await context.Set<Show>().MaxAsync(x => x.ExternalId);
+            var startingPage = maxShowId.HasValue ? decimal.ToInt32(Math.Floor(maxShowId.Value / 250M)) + 1 : 0;
 
+            await CollectShowsAsync(startingPage, context);
+        }
+
+        private async Task CollectShowsAsync(int startingPage, DataContext context)
+        {
+            var shows = new List<MazeTvShow>();
+
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://api.tvmaze.com/"),
+            };
+
+            var requestCount = 0;
+            var requestSuccess = true;
+            while (requestSuccess)
+            {
+                var response = await client.GetAsync($"shows?page={startingPage++}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    await SaveShowsAsync(shows, context);
+                    requestSuccess = false;
+                    continue;
+                }
+
+                var result = await response.Content.ReadAsStringAsync();
+                var requestShows = System.Text.Json.JsonSerializer.Deserialize<IList<MazeTvShow>>(result);
+
+                shows.AddRange(requestShows);
+
+                if (requestCount == 20)
+                {
+                    await SaveShowsAsync(shows, context);
+
+                    shows = new List<MazeTvShow>();
+                    requestCount = 0;
+                    await Task.Delay(TimeSpan.FromSeconds(11));
+                    continue;
+                }
+
+                requestCount++;
+            }
+        }
+    
+        private async Task SaveShowsAsync(List<MazeTvShow> mazeShows, DataContext context)
+        {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<MazeTvShow, Show>()
                 .ForMember(d => d.Id, m => m.Ignore())
                 .ForMember(d => d.CreatedDate, m => m.Ignore())
@@ -55,7 +98,7 @@ namespace Maikelvdb.Xprtz.Assessment.Api.Framework.HostedService
                 .ForMember(d => d.ExternalId, m => m.MapFrom(s => s.Id))
                 );
             var mapper = config.CreateMapper();
-            var shows = mapper.Map<List<Show>>(mazeShows.Where(x => !existingShows.Any(s => s.ExternalId == x.Id)).ToList());
+            var shows = mapper.Map<List<Show>>(mazeShows);
 
             context.AddRange(shows);
             await context.SaveChangesAsync();

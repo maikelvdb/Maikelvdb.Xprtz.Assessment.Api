@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Maikelvdb.Xprtz.Assessment.Api.Services.TvMazeApi.Models
+namespace Maikelvdb.Xprtz.Assessment.Api.Framework.HostedService
 {
     public class MazeTvShow
     {
